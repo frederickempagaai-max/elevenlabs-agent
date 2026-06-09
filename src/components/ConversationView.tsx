@@ -58,14 +58,15 @@ export default function ConversationView({
     setMessages([]);
 
     try {
-      const { avatarId, agentId } = currentPreset;
-
       const res = await fetch("/api/anam-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ avatarId, agentId }),
+        body: JSON.stringify({
+          avatarId: process.env.NEXT_PUBLIC_ANAM_AVATAR_ID,
+          agentId: process.env.NEXT_PUBLIC_ELEVENLABS_AGENT_ID,
+        }),
       });
-
+      
       if (!res.ok) {
         const body = await res.json();
         throw new Error(body.error ?? "Failed to get session token");
