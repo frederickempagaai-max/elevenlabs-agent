@@ -1,10 +1,6 @@
 /**
  * ConversationView — starts an Anam avatar session backed by an ElevenLabs
  * voice agent running server-side on the engine.
- *
- * The client only deals with the Anam SDK — mic audio is captured over
- * WebRTC, and the avatar video + audio are streamed back. All ElevenLabs
- * STT → LLM → TTS orchestration happens on the engine.
  */
 "use client";
 
@@ -31,27 +27,31 @@ export default function ConversationView({
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [messages, setMessages] = useState<Message[]>([]);
 
-  // Ensure selected index is within bounds and get current preset safely
   const hasPresets = presets && presets.length > 0;
-  const safeSelectedIndex = hasPresets ? Math.min(selectedIndex, presets.length - 1) : 0;
+  const safeSelectedIndex = hasPresets
+    ? Math.min(selectedIndex, presets.length - 1)
+    : 0;
   const currentPreset = hasPresets ? presets[safeSelectedIndex] : null;
 
   const anamClientRef = useRef<AnamClient | null>(null);
   const transcriptRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll transcript to bottom when new messages arrive
   useEffect(() => {
     if (transcriptRef.current) {
       transcriptRef.current.scrollTop = transcriptRef.current.scrollHeight;
     }
   }, [messages]);
 
-  const avatarId = process.env.NEXT_PUBLIC_ANAM_AVATAR_ID;
-  const agentId = process.env.NEXT_PUBLIC_ELEVENLABS_AGENT_ID;
+  const start = useCallback(async () => {
+    const avatarId = process.env.NEXT_PUBLIC_ANAM_AVATAR_ID;
+    const agentId = process.env.NEXT_PUBLIC_ELEVENLABS_AGENT_ID;
 
     if (!avatarId || !agentId) {
-    throw new Error("Missing avatarId or agentId");
-  }
+      setError("Missing avatarId or agentId");
+      setStatus("error");
+      return;
+    }
+
     setStatus("connecting");
     setError(null);
     setMessages([]);
@@ -61,11 +61,11 @@ export default function ConversationView({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          avatarId: process.env.NEXT_PUBLIC_ANAM_AVATAR_ID,
-          agentId: process.env.NEXT_PUBLIC_ELEVENLABS_AGENT_ID,
+          avatarId,
+          agentId,
         }),
       });
-      
+
       if (!res.ok) {
         const body = await res.json();
         throw new Error(body.error ?? "Failed to get session token");
@@ -73,20 +73,14 @@ export default function ConversationView({
 
       const { sessionToken } = await res.json();
 
-      // Debug: decode JWT to inspect token type
-      try {
-        const payload = JSON.parse(atob(sessionToken.split(".")[1]));
-        console.log("Token payload:", payload);
-      } catch {}
-
       const anamClient = createClient(sessionToken, {
         ...(process.env.NEXT_PUBLIC_ANAM_API_URL && {
           api: { baseUrl: process.env.NEXT_PUBLIC_ANAM_API_URL },
         }),
       });
+
       anamClientRef.current = anamClient;
 
-      // Stream events fire on every chunk; accumulate into messages by id
       anamClient.addListener(
         AnamEvent.MESSAGE_STREAM_EVENT_RECEIVED,
         (evt: {
@@ -98,6 +92,7 @@ export default function ConversationView({
         }) => {
           setMessages((prev) => {
             const idx = prev.findIndex((m) => m.id === evt.id);
+
             if (idx >= 0) {
               const next = [...prev];
               next[idx] = {
@@ -107,6 +102,7 @@ export default function ConversationView({
               };
               return next;
             }
+
             return [
               ...prev,
               {
@@ -128,16 +124,18 @@ export default function ConversationView({
       setStatus("connected");
     } catch (err) {
       console.error("Start error:", err);
+
       const message =
         err instanceof Error
           ? err.message
           : typeof err === "object" && err !== null
             ? JSON.stringify(err)
             : String(err);
+
       setError(message);
       setStatus("error");
     }
-  }, [hasPresets, currentPreset, presets, selectedIndex]);
+  }, []);
 
   const stop = useCallback(async () => {
     try {
