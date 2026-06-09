@@ -210,13 +210,7 @@ export default function ConversationView({
          Hi. Click The Phone Button To Connect With Frederick
         </p>
       </div>
-      <div
-        className={
-          (status === "connecting" || status === "connected")
-            ? "w-full flex flex-col items-center gap-1 sm:gap-2"
-            : "w-full flex flex-col items-center gap-2 sm:gap-4"
-        }
-      >
+     <div className="w-full flex flex-col items-center gap-2 sm:gap-4">
       {/* Video player with carousel controls */}
       <div className="w-full flex justify-center items-center gap-3 sm:gap-4 flex-shrink">
         {/* Left arrow - hidden when session starts */}
