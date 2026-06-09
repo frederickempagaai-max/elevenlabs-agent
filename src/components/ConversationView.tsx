@@ -52,7 +52,12 @@ export default function ConversationView({
       setStatus("error");
       return;
     }
+  const avatarId = process.env.NEXT_PUBLIC_ANAM_AVATAR_ID;
+  const agentId = process.env.NEXT_PUBLIC_ELEVENLABS_AGENT_ID;
 
+    if (!avatarId || !agentId) {
+    throw new Error("Missing avatarId or agentId");
+  }
     setStatus("connecting");
     setError(null);
     setMessages([]);
