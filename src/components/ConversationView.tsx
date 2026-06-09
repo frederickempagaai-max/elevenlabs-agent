@@ -156,7 +156,7 @@ export default function ConversationView({
     setSelectedIndex((prev) => (prev - 1 + presets.length) % presets.length);
   }, [presets.length, status]);
 
-
+/*
   return (
     <>
       {/* Contact Sales button - fades when session starts */}
@@ -167,7 +167,7 @@ export default function ConversationView({
           pointerEvents: status === "connecting" || status === "connected" ? "none" : "auto",
         }}
       >
-        /*
+      
         <a
           href="https://lab.anam.ai/login"
           target="_blank"
@@ -177,9 +177,9 @@ export default function ConversationView({
         >
           Sign Up
         </a>
-        */
+        
       </div>
-
+*/
       {/* Heading - fades out when session starts */}
       <div
         className="flex flex-col items-center gap-0.5 sm:gap-2 text-center flex-shrink-0 transition-opacity duration-500 ease-out motion-reduce:transition-none mb-16"
