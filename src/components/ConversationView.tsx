@@ -212,7 +212,7 @@ export default function ConversationView({
       </div>
       <div
         className={
-          status === "connecting" || status === "connected"
+          (status === "connecting" || status === "connected")
             ? "w-full flex flex-col items-center gap-1 sm:gap-2"
             : "w-full flex flex-col items-center gap-2 sm:gap-4"
         }
