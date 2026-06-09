@@ -160,7 +160,6 @@ export default function ConversationView({
   return (
     <>
       {/* Contact Sales button - fades when session starts */}
-/*
         <div
         className="fixed top-4 right-4 sm:top-8 sm:right-8 z-10 transition-opacity duration-500 ease-out motion-reduce:transition-none"
         style={{
@@ -180,7 +179,6 @@ export default function ConversationView({
         </a>
         
       </div>
-*/
       {/* Heading - fades out when session starts */}
       <div
         className="flex flex-col items-center gap-0.5 sm:gap-2 text-center flex-shrink-0 transition-opacity duration-500 ease-out motion-reduce:transition-none mb-16"
