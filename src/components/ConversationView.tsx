@@ -177,7 +177,7 @@ export default function ConversationView({
           Sign Up
         </a>
       </div>
-</div>
+
       {/* Heading - fades out when session starts */}
       <div
         className="flex flex-col items-center gap-0.5 sm:gap-2 text-center flex-shrink-0 transition-opacity duration-500 ease-out motion-reduce:transition-none mb-16"
