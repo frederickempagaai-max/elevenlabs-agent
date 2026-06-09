@@ -177,24 +177,6 @@ export default function ConversationView({
           Sign Up
         </a>
       </div>
-<div className="video-wrap">
-  <video
-    id="avatar-video"
-    autoPlay
-    playsInline
-    muted={false}
-    className="avatar-video"
-  />
-
-  {status === "idle" && (
-    <div className="video-placeholder">
-      Click the phone button to start the avatar
-    </div>
-  )}
-
-  <button onClick={start} disabled={status === "connecting"}>
-    📞
-  </button>
 </div>
       {/* Heading - fades out when session starts */}
       <div
@@ -224,7 +206,7 @@ export default function ConversationView({
           </span>
         </div>
         <p className="text-black/70 text-[11px] sm:text-[32px] font-medium tracking-tight leading-tight sm:leading-[44px]">
-          Expressive Voice Agents
+         Hi. Click The Phone Button To Connect With Frederick
         </p>
       </div>
 
