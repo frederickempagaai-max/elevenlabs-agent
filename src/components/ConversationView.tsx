@@ -160,7 +160,8 @@ export default function ConversationView({
   return (
     <>
       {/* Contact Sales button - fades when session starts */}
-      <div
+/*
+        <div
         className="fixed top-4 right-4 sm:top-8 sm:right-8 z-10 transition-opacity duration-500 ease-out motion-reduce:transition-none"
         style={{
           opacity: status === "connecting" || status === "connected" ? 0 : 1,
