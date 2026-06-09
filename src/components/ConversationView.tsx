@@ -167,6 +167,7 @@ export default function ConversationView({
           pointerEvents: status === "connecting" || status === "connected" ? "none" : "auto",
         }}
       >
+        /*
         <a
           href="https://lab.anam.ai/login"
           target="_blank"
@@ -176,6 +177,7 @@ export default function ConversationView({
         >
           Sign Up
         </a>
+        */
       </div>
 
       {/* Heading - fades out when session starts */}
